@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <title>AIエージェント×開発 ハンズオン</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/theme/moon.css">
+    <style>
+        .reveal {
+            font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+            line-height: 1.1;
+        }
+        .reveal h1 {
+            font-size: 2.2em;
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
+        .reveal h2 {
+            font-size: 1.3em;
+            line-height: 1.2;
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
+        .reveal h3 {
+            font-size: 1.3em;
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow-wrap: normal;
+        }
+        .reveal ul {
+            display: block;
+        }
+        .reveal li {
+            margin-bottom: 0.3em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+        .reveal section {
+            padding: 15px 50px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+        .reveal p {
+            margin: 0.8em 0;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+        .highlight {
+            color: #42affa;
+            font-weight: bold;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .emoji-large {
+            font-size: 3em;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .feature-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .feature-item h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #42affa;
+        }
+        .feature-item p {
+            font-size: 0.8em;
+            margin-top: 6px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .comparison-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .comparison-item h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        .comparison-item ul {
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+        .comparison-item.traditional h3 {
+            color: #ff6b6b;
+        }
+        .comparison-item.vibecoding {
+            border: 2px solid #42affa;
+        }
+        .comparison-item.vibecoding h3 {
+            color: #42affa;
+        }
+        .goal-box {
+            background: rgba(66, 175, 250, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 5px solid #42affa;
+            margin-top: 15px;
+        }
+        .goal-box h3 {
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            color: #42affa;
+        }
+        .goal-box ul {
+            font-size: 0.9em;
+            text-align: left;
+        }
+        .info-box {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .info-box p {
+            font-size: 0.8em;
+        }
+        .merit-box {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .merit-box p {
+            font-size: 0.85em;
+        }
+        .important-point {
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+        .important-point p {
+            margin-top: 6px;
+        }
+        .step-list {
+            margin-top: 30px;
+            font-size: 1em;
+        }
+        .step-list p {
+            margin-top: 20px;
+        }
+        .step-list p:first-child {
+            margin-top: 0;
+        }
+        .tip-text {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #42affa;
+        }
+        .title-subtitle {
+            margin-top: 50px;
+            font-size: 1.2em;
+        }
+        .title-date {
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .title-time {
+            margin-top: 30px;
+            font-size: 1em;
+            color: #42affa;
+        }
+        .title-description {
+            margin-top: 30px;
+            font-size: 1em;
+            color: #42affa;
+        }
+        .title-goal {
+            margin-top: 40px;
+            font-size: 1.1em;
+        }
+        .agenda-list {
+            font-size: 0.95em;
+            margin-top: 20px;
+        }
+        .agenda-summary {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #42affa;
+        }
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .choice-card {
+            background: rgba(255,255,255,0.1);
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .choice-card:hover {
+            border-color: #42affa;
+            background: rgba(66, 175, 250, 0.1);
+        }
+        .choice-card h3 {
+            color: #42affa;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+        .choice-card p {
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+        .choice-card ul {
+            text-align: left;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+        .tool-selection-grid {
+            display: grid;
+            grid-template-columns: 4fr 1fr;
+            gap: 30px;
+            margin-top: 25px;
+            align-items: start;
+        }
+        .recommended-card {
+            background: rgba(66, 175, 250, 0.18);
+            padding: 35px;
+            border-radius: 15px;
+            border: 4px solid #42affa;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(66, 175, 250, 0.3);
+        }
+        .recommended-card h3 {
+            color: #42affa;
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .recommended-card p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .recommended-card ul {
+            text-align: left;
+            font-size: 1em;
+            margin: 20px auto;
+            display: block;
+            padding-left: 0;
+            list-style-position: inside;
+            max-width: fit-content;
+        }
+        .recommended-card .link-button {
+            margin-top: 30px !important;
+            display: block !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            width: fit-content !important;
+            font-size: 1em !important;
+            padding: 14px 28px !important;
+        }
+        .alternative-box {
+            background: rgba(255,255,255,0.04);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .alternative-box h3 {
+            font-size: 0.65em;
+            color: rgba(66, 175, 250, 0.6);
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        .alternative-box p {
+            font-size: 0.6em;
+            margin-bottom: 5px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.2;
+        }
+        .alternative-box ul {
+            font-size: 0.55em;
+            text-align: left;
+            margin: 5px auto;
+            display: inline-block;
+            padding-left: 0;
+            list-style-position: inside;
+            line-height: 1.3;
+        }
+        .alternative-link {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 5px 10px;
+            background: rgba(66, 175, 250, 0.12);
+            color: rgba(66, 175, 250, 0.8);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: normal;
+            font-size: 0.6em;
+            transition: background 0.3s;
+        }
+        .alternative-link:hover {
+            background: rgba(66, 175, 250, 0.2);
+        }
+        .link-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #42affa;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+        .recommended-card .link-button {
+            display: block;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+        }
+        .link-button:hover {
+            background: #2e8bc0;
+        }
+        .warning-box {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .warning-box h3, .info-box h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        .warning-box h3 {
+            color: #ffc107;
+        }
+        .warning-box ul, .info-box ul {
+            font-size: 0.8em;
+            text-align: left;
+        }
+        .warning-box p, .info-box p {
+            font-size: 0.8em;
+        }
+        .content-wrapper {
+            margin-top: 20px;
+        }
+        .completion-message {
+            margin-top: 30px;
+            font-size: 1em;
+        }
+        .completion-message p {
+            margin-top: 20px;
+        }
+        .completion-message p:first-child {
+            margin-top: 0;
+        }
+        .completion-message .highlight {
+            color: #42affa;
+        }
+        .api-endpoint {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.65em;
+            margin: 6px 0;
+            text-align: left;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+        .api-endpoint a {
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .requirement-box {
+            background: rgba(66, 175, 250, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #42affa;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .requirement-box h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #42affa;
+        }
+        .requirement-box ul {
+            font-size: 0.8em;
+        }
+        .customize-box {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .customize-box h3 {
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            color: #4CAF50;
+        }
+        .customize-box ul {
+            font-size: 0.7em;
+        }
+        .customize-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .best-practice {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .best-practice h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #ffc107;
+        }
+        .best-practice ul {
+            font-size: 0.8em;
+            text-align: left;
+        }
+        .best-practice p {
+            font-size: 0.75em;
+        }
+        .bad-example {
+            color: #ff6b6b;
+            font-size: 0.75em;
+            margin: 8px 0;
+        }
+        .good-example {
+            color: #4CAF50;
+            font-size: 0.7em;
+        }
+        .code-block {
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.55em;
+            text-align: left;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 480px;
+            margin: 10px 0;
+            line-height: 1.25;
+        }
+        .content-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .content-list ul {
+            font-size: 0.9em;
+        }
+        .doc-link {
+            margin-top: 20px;
+        }
+        .doc-link p {
+            font-size: 0.8em;
+        }
+        .doc-link a {
+            color: #42affa;
+        }
+        .endpoint-list {
+            margin-top: 20px;
+        }
+        .endpoint-tip {
+            margin-top: 20px;
+            font-size: 0.75em;
+            color: #42affa;
+            line-height: 1.4;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .requirement-subtitle {
+            font-size: 0.8em;
+            color: #42affa;
+            margin-bottom: 15px;
+        }
+        .requirement-tip {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #4CAF50;
+        }
+        .customize-subtitle {
+            font-size: 0.8em;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        .customize-tip {
+            margin-top: 15px;
+            font-size: 0.8em;
+            color: #42affa;
+        }
+        .practice-wrapper {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .practice-wrapper .best-practice {
+            margin-top: 12px;
+        }
+        .practice-wrapper .best-practice:first-child {
+            margin-top: 0;
+        }
+        .error-wrapper {
+            margin-top: 15px;
+        }
+        .error-wrapper .best-practice {
+            margin-top: 12px;
+        }
+        .error-wrapper .best-practice:first-child {
+            margin-top: 0;
+        }
+        .prompt-tip {
+            margin-top: 12px;
+            font-size: 0.8em;
+            color: #42affa;
+        }
+        .dev-start {
+            margin-top: 30px;
+            font-size: 1em;
+        }
+        .dev-start p {
+            margin-top: 20px;
+        }
+        .dev-start p:first-child {
+            margin-top: 0;
+        }
+        .dev-start .highlight {
+            color: #42affa;
+        }
+        .dev-tip {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #4CAF50;
+        }
+        .hint-box {
+            background: rgba(66, 175, 250, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #42affa;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .hint-box h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #42affa;
+        }
+        .hint-box ul {
+            font-size: 0.8em;
+        }
+        .hint-box p {
+            font-size: 0.8em;
+        }
+        .hint-box.margin-top {
+            margin-top: 12px;
+        }
+        .problem-box {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .problem-box h3 {
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+            line-height: 1.3;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .problem-box p {
+            font-size: 0.8em;
+        }
+        .problem-box.margin-bottom {
+            margin-bottom: 12px;
+        }
+        .solution-box {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .solution-box h3 {
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            color: #4CAF50;
+            line-height: 1.3;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .solution-box ul {
+            font-size: 0.8em;
+        }
+        .solution-box p {
+            font-size: 0.7em;
+            line-height: 1.4;
+        }
+        .solution-box li {
+            font-size: 0.75em;
+            line-height: 1.3;
+            margin-bottom: 0.4em;
+        }
+        .tip-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .tip-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .tip-item h3 {
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            color: #42affa;
+        }
+        .tip-item ul {
+            font-size: 0.75em;
+        }
+        .prompt-wrapper {
+            text-align: left;
+        }
+        .prompt-basics {
+            margin-top: 0;
+        }
+        .prompt-intro {
+            font-size: 0.8em;
+            color: #42affa;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .prompt-elements {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 0;
+        }
+        .prompt-element {
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: left;
+        }
+        .prompt-element h3 {
+            font-size: 0.85em;
+            color: #42affa;
+            margin-bottom: 5px;
+        }
+        .element-description {
+            font-size: 0.6em;
+            margin-bottom: 6px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.15;
+        }
+        .element-example {
+            background: rgba(0,0,0,0.3);
+            padding: 5px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .example-label {
+            font-size: 0.6em;
+            color: #42affa;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .example-text {
+            font-size: 0.6em;
+            margin-top: 2px;
+            line-height: 1.25;
+        }
+        .example-list {
+            font-size: 0.6em;
+            margin-top: 2px;
+            padding-left: 14px;
+            line-height: 1.25;
+        }
+        .example-list li {
+            margin-bottom: 2px;
+        }
+        .element-note {
+            font-size: 0.55em;
+            color: rgba(255,255,255,0.7);
+            margin-top: 5px;
+            font-style: italic;
+            line-height: 1.15;
+        }
+        .support-wrapper {
+            margin-top: 20px;
+        }
+        .support-tip {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #4CAF50;
+        }
+        .dev-steps {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .summary-list {
+            margin-top: 30px;
+            font-size: 1.0em;
+        }
+        .summary-list p {
+            margin-top: 20px;
+        }
+        .summary-list p:first-child {
+            margin-top: 0;
+        }
+        .summary-list .highlight {
+            color: #42affa;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .summary-card {
+            background: rgba(66, 175, 250, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #42affa;
+            text-align: left;
+        }
+        .summary-card p {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .summary-card.highlight-card {
+            background: rgba(66, 175, 250, 0.25);
+            border-left-color: #42affa;
+        }
+        .summary-card.highlight-card p {
+            color: #42affa;
+            font-weight: bold;
+        }
+        .summary-info {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        .summary-info p {
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+        .summary-info .time {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .summary-tip {
+            margin-top: 25px;
+            font-size: 1.0em;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .presentation-info {
+            margin-top: 20px;
+        }
+        .presentation-box {
+            background: rgba(66, 175, 250, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #42affa;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .presentation-tip {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .presentation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .presentation-card {
+            background: rgba(66, 175, 250, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #42affa;
+            text-align: left;
+        }
+        .presentation-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            color: #42affa;
+            line-height: 1.3;
+        }
+        .presentation-card h3 .time {
+            font-size: 0.85em;
+            font-weight: normal;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .presentation-card .content {
+            font-size: 0.8em;
+            line-height: 1.5;
+            margin-top: 8px;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .presentation-card.prepare-card {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .presentation-card.prepare-card h3 {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- ============================================ -->
+            <!-- 導入セクション -->
+            <!-- ============================================ -->
+            
+            <!-- スライド1: タイトル -->
+            <section>
+                <h1>🤖 AIエージェント×開発</h1>
+                <h3>ハンズオン</h3>
+                <p class="title-subtitle">コーディング不要で作る<br>"動くWebアプリ"体験会</p>
+                <p class="title-date">2025年11月28日（金）</p>
+                <aside class="notes">
+                    【30秒】
+                    こんにちは。本日はAIエージェント開発ハンズオンにご参加いただき、ありがとうございます。
+                    今日は、AIエージェントを使って、コーディングの知識がなくても動くECサイトを作る体験をしていただきます。
+                </aside>
+            </section>
+
+            <!-- スライド2: アジェンダ -->
+            <section>
+                <h2>📋 今日の流れ</h2>
+                <ul class="agenda-list">
+                    <li class="fragment">導入・AIエージェント説明（20分）</li>
+                    <li class="fragment">環境構築（25分）</li>
+                    <li class="fragment">お題説明・ルール共有（15分）</li>
+                    <li class="fragment">開発タイム（60分）</li>
+                    <li class="fragment">発表タイム（70分）</li>
+                </ul>
+                <p class="agenda-summary">
+                    合計: 約3時間45分（休憩含む）
+                </p>
+                <aside class="notes">
+                    【20秒】
+                    今日の流れをご説明します。
+                    まず導入とAIエージェントの説明から始まり、環境構築、お題説明、そして開発タイム、最後に発表タイムという構成です。
+                    合計で約3時間45分のプログラムです。
+                </aside>
+            </section>
+
+            <!-- スライド3: AIエージェントとは -->
+            <section>
+                <h2>🤖 AIエージェントとは</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3>開発を支援するAIツール</h3>
+                        <p>コード生成、エラー修正、リファクタリングなどを自動で行う</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>代表的なツール</h3>
+                        <p><span class="highlight">Cursor</span>、<span class="highlight">Windsurf</span>、<span class="highlight">GitHub Copilot</span>など</p>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <p>
+                        💡 <strong>アライドでの活用事例</strong><br>
+                        実際のプロジェクトでもAIエージェントを活用し、開発効率を大幅に向上させています
+                    </p>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    AIエージェントとは、開発を支援するAIツールの総称です。
+                    コード生成、エラー修正、リファクタリングなどを自動で行ってくれます。
+                    代表的なツールとして、Cursor、Windsurf、GitHub Copilotなどがあります。
+                    アライドでも実際のプロジェクトでAIエージェントを活用し、開発効率を大幅に向上させています。
+                </aside>
+            </section>
+
+            <!-- スライド4: バイブコーディングとは -->
+            <section>
+                <h2>💡 バイブコーディングとは</h2>
+                <div class="comparison">
+                    <div class="comparison-item traditional">
+                        <h3>従来のコーディング</h3>
+                        <ul>
+                            <li>構文を覚える</li>
+                            <li>エラーと格闘</li>
+                            <li>ドキュメントを読む</li>
+                            <li>時間がかかる</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item vibecoding">
+                        <h3>バイブコーディング</h3>
+                        <ul>
+                            <li>プロンプトで指示</li>
+                            <li>AIが実装</li>
+                            <li>対話で改善</li>
+                            <li>短時間で完成</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="merit-box">
+                    <p>
+                        <strong>メリット</strong>: スピード、学習コスト低減、アイデア実現の容易さ
+                    </p>
+                </div>
+                <aside class="notes">
+                    【50秒】
+                    バイブコーディングとは、従来のコーディングとは異なる新しい開発スタイルです。
+                    従来は構文を覚え、エラーと格闘し、ドキュメントを読む必要がありましたが、
+                    バイブコーディングでは、プロンプトで指示を出すだけでAIが実装してくれます。
+                    対話しながら改善していくことで、短時間で完成させることができます。
+                    メリットとして、スピード、学習コストの低減、アイデア実現の容易さがあります。
+                </aside>
+            </section>
+
+            <!-- スライド5: 今日のゴール -->
+            <section>
+                <h2>🎯 今日のゴール</h2>
+                <div class="goal-box">
+                    <h3>60分で動くECサイトを完成させる</h3>
+                    <ul>
+                        <li class="fragment">AIとの対話で開発する感覚を掴む</li>
+                        <li class="fragment"><span class="highlight">API連携</span>という実務スキルを体験する</li>
+                        <li class="fragment">各自の工夫・個性を発揮する</li>
+                    </ul>
+                </div>
+                <div class="important-point">
+                    <p>💡 <strong>重要なポイント</strong></p>
+                    <p>
+                        プログラミングの深い知識がなくても、<br>
+                        <span class="highlight">実用的なWebアプリが開発できる</span>ことを実感してください
+                    </p>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    今日のゴールは、60分で動くECサイトを完成させることです。
+                    その中で、AIとの対話で開発する感覚を掴み、API連携という実務スキルを体験し、
+                    各自の工夫や個性を発揮していただきたいと思います。
+                    重要なポイントは、プログラミングの深い知識がなくても、
+                    実用的なWebアプリが開発できることを実感していただくことです。
+                </aside>
+            </section>
+
+            <!-- スライド6: 次のステップ -->
+            <section>
+                <h2>🚀 次のステップ</h2>
+                <div class="step-list">
+                    <p class="fragment">1. 環境構築（Cursor / Windsurf）</p>
+                    <p class="fragment">2. お題説明とルール共有</p>
+                    <p class="fragment">3. 開発タイム開始！</p>
+                </div>
+                <div class="tip-text">
+                    <p>💡 わからないことがあれば、いつでも質問してください</p>
+                </div>
+                <aside class="notes">
+                    【20秒】
+                    次のステップとして、環境構築から始めます。
+                    CursorまたはWindsurfをインストールしていただき、
+                    その後、お題説明とルール共有を行い、開発タイムを開始します。
+                    わからないことがあれば、いつでも質問してください。
+                </aside>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- 環境構築セクション -->
+            <!-- ============================================ -->
+
+            <!-- スライド8: 環境構築タイトル -->
+            <section>
+                <h2>🔧 環境構築</h2>
+                <p class="title-subtitle">AIエージェントツールを<br>インストールしましょう</p>
+                <p class="title-time">所要時間: 約25分</p>
+                <aside class="notes">
+                    【10秒】
+                    環境構築の時間です。AIエージェントツールをインストールしていただきます。
+                    所要時間は約25分です。
+                </aside>
+            </section>
+
+            <!-- スライド9: ツール選択 -->
+            <section>
+                <h2>🔧 インストールするツール</h2>
+                <div class="tool-selection-grid">
+                    <div class="recommended-card">
+                        <h3>🖥️ Cursor</h3>
+                        <p><strong>推奨・基本ツール</strong></p>
+                        <ul>
+                            <li>無償枠あり</li>
+                            <li>使いやすいUI</li>
+                            <li>日本語対応</li>
+                        </ul>
+                        <a href="../setup/cursor-installation.html" class="link-button" target="_blank">
+                            インストール手順を見る
+                        </a>
+                    </div>
+                    <div class="alternative-box">
+                        <h3>🌊 代替案</h3>
+                        <p>Windsurf</p>
+                        <ul>
+                            <li>無償枠あり</li>
+                            <li>高性能</li>
+                            <li>企業向け機能</li>
+                        </ul>
+                        <a href="../setup/windsurf-installation.html" class="alternative-link" target="_blank">
+                            手順を見る
+                        </a>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    基本ツールとしてCursorをインストールしていただきます。
+                    Cursorは無償枠があり、使いやすいUI、日本語対応という特徴があります。
+                    万が一Cursorが使えない場合は、Windsurfを代替案として利用できます。
+                </aside>
+            </section>
+
+            <!-- スライド10: インストール手順の確認 -->
+            <section>
+                <h2>📋 インストール手順</h2>
+                <div class="step-list" style="margin-top: 20px; text-align: left; font-size: 0.95em;">
+                    <ol>
+                        <li class="fragment">公式サイトからダウンロード</li>
+                        <li class="fragment">インストール実行</li>
+                        <li class="fragment">初回起動とサインイン</li>
+                        <li class="fragment">初期設定（日本語化など）</li>
+                    </ol>
+                </div>
+                <div class="info-box">
+                    <p>
+                        📖 <strong>詳細な手順</strong>は、選択したツールのインストール手順ページをご確認ください<br>
+                        わからないことがあれば、いつでも質問してください
+                    </p>
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    インストール手順は、公式サイトからダウンロード、インストール実行、
+                    初回起動とサインイン、初期設定という流れです。
+                    詳細な手順は、選択したツールのインストール手順ページをご確認ください。
+                    わからないことがあれば、いつでも質問してください。
+                </aside>
+            </section>
+
+            <!-- スライド11: トラブルシューティング -->
+            <section>
+                <h2>🔧 トラブルシューティング</h2>
+                <div class="content-wrapper">
+                    <div class="warning-box">
+                        <h3>よくある問題</h3>
+                        <ul>
+                            <li>インストールが失敗する</li>
+                            <li>起動しない</li>
+                            <li>サインインできない</li>
+                            <li>AIが応答しない</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <p>
+                            💡 <strong>解決方法</strong>は、各ツールのインストール手順ページの<br>
+                            「トラブルシューティング」セクションをご確認ください<br>
+                            それでも解決しない場合は、お気軽に質問してください
+                        </p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    よくある問題として、インストールが失敗する、起動しない、
+                    サインインできない、AIが応答しないなどがあります。
+                    解決方法は、各ツールのインストール手順ページの「トラブルシューティング」セクションをご確認ください。
+                    それでも解決しない場合は、お気軽に質問してください。
+                </aside>
+            </section>
+
+            <!-- スライド12: インストール完了 -->
+            <section>
+                <h2>✅ インストール完了</h2>
+                <div class="completion-message">
+                    <p class="fragment">インストールが完了したら、</p>
+                    <p class="fragment highlight">
+                        次のステップに進みましょう！
+                    </p>
+                </div>
+                <div class="info-box">
+                    <p>
+                        💡 <strong>動作確認</strong>は、開発タイムで実際に使ってみながら行います<br>
+                        まずはインストールが完了していることを確認してください
+                    </p>
+                </div>
+                <aside class="notes">
+                    【20秒】
+                    インストールが完了したら、次のステップに進みましょう。
+                    動作確認は、開発タイムで実際に使ってみながら行います。
+                    まずはインストールが完了していることを確認してください。
+                </aside>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- お題説明セクション -->
+            <!-- ============================================ -->
+
+            <!-- スライド13: お題説明タイトル -->
+            <section>
+                <h2>🎯 お題説明</h2>
+                <h3 class="title-subtitle">FakeStoreAPIを使ったECサイト構築</h3>
+                <p class="title-goal">今日の目標: 60分で動くECサイトを完成させる</p>
+                <aside class="notes">
+                    【20秒】
+                    お題説明の時間です。今日はFakeStoreAPIを使ったECサイト構築に取り組みます。
+                    目標は60分で動くECサイトを完成させることです。
+                </aside>
+            </section>
+
+            <!-- スライド14: FakeStoreAPIとは -->
+            <section>
+                <h2>📡 FakeStoreAPIとは</h2>
+                <div class="content-list">
+                    <ul>
+                        <li class="fragment">無料で利用できるECサイト用のテストAPI</li>
+                        <li class="fragment">商品データ、カテゴリー、ユーザー情報などを提供</li>
+                        <li class="fragment">インストール不要、すぐに使える</li>
+                    </ul>
+                </div>
+                <div class="doc-link">
+                    <p>
+                        📖 <strong>公式ドキュメント</strong>: 
+                        <a href="https://fakestoreapi.com/docs" target="_blank">
+                            https://fakestoreapi.com/docs
+                        </a>
+                    </p>
+                </div>
+                <div class="info-box" style="margin-top: 20px;">
+                    <p>
+                        💡 <strong>重要</strong>: インターン全員がこのAPIを利用します<br>
+                        ブラウザで直接アクセスして、データ構造を確認してみましょう
+                    </p>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    FakeStoreAPIは無料で利用できるECサイト用のテストAPIです。
+                    商品データ、カテゴリー、ユーザー情報などを提供します。
+                    インストール不要で、すぐに使えます。
+                    公式ドキュメントは https://fakestoreapi.com/docs です。
+                    インターン全員がこのAPIを利用します。
+                    ブラウザで直接アクセスして、データ構造を確認してみましょう。
+                </aside>
+            </section>
+
+            <!-- スライド15: 主要なエンドポイント -->
+            <section>
+                <h2>🔗 主要なエンドポイント</h2>
+                <div class="endpoint-list">
+                    <div class="api-endpoint">
+                        <strong>商品一覧取得</strong><br>
+                        GET <a href="https://fakestoreapi.com/products" target="_blank" style="color: #42affa;">https://fakestoreapi.com/products</a>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>商品詳細取得</strong><br>
+                        GET <a href="https://fakestoreapi.com/products/1" target="_blank" style="color: #42affa;">https://fakestoreapi.com/products/1</a>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>カテゴリー一覧</strong><br>
+                        GET <a href="https://fakestoreapi.com/products/categories" target="_blank" style="color: #42affa;">https://fakestoreapi.com/products/categories</a>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>カテゴリー別商品</strong><br>
+                        GET <a href="https://fakestoreapi.com/products/category/electronics" target="_blank" style="color: #42affa;">https://fakestoreapi.com/products/category/electronics</a>
+                    </div>
+                </div>
+                <div class="endpoint-tip">
+                    💡 ブラウザで直接アクセスして、レスポンスを確認してみましょう
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    主要なエンドポイントを紹介します。
+                    商品一覧取得、商品詳細取得、カテゴリー一覧、カテゴリー別商品の4つです。
+                    ブラウザで直接アクセスして、レスポンスを確認してみましょう。
+                </aside>
+            </section>
+
+            <!-- スライド16: お題 - レベル1 -->
+            <section>
+                <h2>✅ お題 - レベル1</h2>
+                <p class="requirement-subtitle">最低限クリアしてほしい項目</p>
+                <div class="requirement-box">
+                    <h3>商品一覧・詳細表示</h3>
+                    <ul>
+                        <li>ブラウザで動作する（HTML+CSS+JavaScript）</li>
+                        <li>ローカル環境で動作すること</li>
+                        <li>FakeStoreAPIから商品データを取得</li>
+                        <li>商品一覧をカード形式で表示（商品画像、商品名、価格）</li>
+                        <li>商品詳細ページの実装（クリックで詳細ページに遷移）</li>
+                        <li>一覧に戻るボタン</li>
+                        <li>PCで見やすいデザイン</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    【50秒】
+                    お題のレベル1です。最低限クリアしてほしい項目です。
+                    商品一覧・詳細表示を実装します。
+                    ブラウザで動作するHTML+CSS+JavaScriptで、ローカル環境で動作すること、
+                    FakeStoreAPIから商品データを取得し、商品一覧をカード形式で表示、
+                    商品詳細ページの実装、一覧に戻るボタン、PCで見やすいデザインが必要です。
+                </aside>
+            </section>
+
+            <!-- スライド17: お題 - レベル2 -->
+            <section>
+                <h2>✅ お題 - レベル2</h2>
+                <p class="requirement-subtitle">60分目標</p>
+                <div class="requirement-box">
+                    <h3>基本機能追加</h3>
+                    <ul>
+                        <li>カテゴリーフィルター機能</li>
+                        <li>ローディング表示（API取得中）</li>
+                        <li>価格の並び替え機能（昇順・降順）</li>
+                    </ul>
+                </div>
+                <div class="requirement-tip">
+                    💡 レベル1が完成したら、レベル2にチャレンジしましょう
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    お題のレベル2です。60分目標です。
+                    基本機能追加として、カテゴリーフィルター機能、ローディング表示、
+                    価格の並び替え機能を実装します。
+                    レベル1が完成したら、レベル2にチャレンジしましょう。
+                </aside>
+            </section>
+
+            <!-- スライド18: カスタマイズテーマ -->
+            <section>
+                <h2>🎨 カスタマイズテーマ</h2>
+                <p class="customize-subtitle">早く終わった人向け・追加課題</p>
+                <div class="customize-grid">
+                    <div class="customize-box">
+                        <h3>1. 検索機能</h3>
+                        <ul>
+                            <li>商品名での検索</li>
+                            <li>リアルタイム検索</li>
+                            <li>検索結果のハイライト</li>
+                        </ul>
+                    </div>
+                    <div class="customize-box">
+                        <h3>2. カート機能</h3>
+                        <ul>
+                            <li>カートへの追加</li>
+                            <li>数量の増減</li>
+                            <li>合計金額の計算</li>
+                        </ul>
+                    </div>
+                    <div class="customize-box">
+                        <h3>3. デザイン強化</h3>
+                        <ul>
+                            <li>アニメーション効果</li>
+                            <li>ダークモード</li>
+                            <li>お気に入り機能</li>
+                        </ul>
+                    </div>
+                    <div class="customize-box">
+                        <h3>4. 高度な機能</h3>
+                        <ul>
+                            <li>ページネーション</li>
+                            <li>評価の星表示</li>
+                            <li>おすすめ商品</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="customize-tip">
+                    💡 または独自のアイデアを実装してもOKです！
+                </div>
+                <aside class="notes">
+                    【50秒】
+                    カスタマイズテーマです。早く終わった人向けの追加課題です。
+                    4つのテーマがあります。検索機能、カート機能、デザイン強化、高度な機能です。
+                    または独自のアイデアを実装してもOKです。
+                </aside>
+            </section>
+
+            <!-- スライド19: プロンプトエンジニアリングの基本 -->
+            <section style="padding: 0.3em 1em;">
+                <h2 style="font-size: 1.1em; margin-bottom: 0.2em;">💡 プロンプトエンジニアリングの基本</h2>
+                <div class="prompt-basics">
+                    <p class="prompt-intro">良いプロンプトは3つの要素で構成されます</p>
+                    <div class="prompt-elements">
+                        <div class="prompt-element">
+                            <h3>🎭 役割</h3>
+                            <p class="element-description">AIの立場を指定</p>
+                            <div class="element-example">
+                                <p class="example-label">例：</p>
+                                <p class="example-text">「経験豊富なWeb開発者」</p>
+                            </div>
+                            <p class="element-note">※ 任意</p>
+                        </div>
+                        <div class="prompt-element">
+                            <h3>🎯 目的</h3>
+                            <p class="element-description">何を作るか</p>
+                            <div class="element-example">
+                                <p class="example-label">例：</p>
+                                <p class="example-text">「TODOアプリ作成」</p>
+                            </div>
+                        </div>
+                        <div class="prompt-element">
+                            <h3>📋 コンテキスト</h3>
+                            <p class="element-description">実装の詳細</p>
+                            <div class="element-example">
+                                <p class="example-label">例：</p>
+                                <ul class="example-list">
+                                    <li>HTML+CSS+JS</li>
+                                    <li>追加・削除機能</li>
+                                    <li>LocalStorage</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【60秒】
+                    プロンプトエンジニアリングの基本です。
+                    良いプロンプトは3つの要素で構成されます。
+                    役割、目的、コンテキストです。
+                    役割は必須ではありませんが、含めるとより良い回答が得られることがあります。
+                    目的は何を作りたいのか、何を達成したいのかを明確にします。
+                    コンテキストは実装の詳細や制約条件を伝えます。
+                </aside>
+            </section>
+
+            <!-- スライド21: トラブルシューティングのコツ -->
+            <section>
+                <h2>🔧 トラブルシューティングのコツ</h2>
+                <div class="error-wrapper">
+                    <div class="best-practice">
+                        <h3>問題を具体的に伝える</h3>
+                        <ul>
+                            <li>「クリックしても動作しない」</li>
+                            <li>「期待通りに表示されない」</li>
+                            <li>「画像が表示されない」</li>
+                            <li>「ボタンが反応しない」</li>
+                        </ul>
+                    </div>
+                    <div class="best-practice">
+                        <h3>状況を明確に伝える</h3>
+                        <ul>
+                            <li>「どこをクリックしたか」</li>
+                            <li>「何が期待されていたか」</li>
+                            <li>「実際にどうなったか」</li>
+                            <li>「ブラウザのコンソールにエラーが出ているか」</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    トラブルシューティングのコツです。
+                    問題を具体的に伝えることが重要です。
+                    「クリックしても動作しない」「期待通りに表示されない」など、実際の動作に関する問題を明確に伝えます。
+                    状況を明確に伝えることも重要です。
+                    「どこをクリックしたか」「何が期待されていたか」「実際にどうなったか」を明確にします。
+                    ブラウザのコンソールにエラーが出ているかも確認しましょう。
+                </aside>
+            </section>
+
+            <!-- スライド22: 効果的な伝え方 -->
+            <section>
+                <h2>💡 効果的な伝え方</h2>
+                <div class="error-wrapper">
+                    <div class="best-practice">
+                        <h3>📸 スクリーンショットを活用</h3>
+                        <ul>
+                            <li>問題が起きている画面を撮影</li>
+                            <li>Cursorのチャットに画像を添付</li>
+                            <li>視覚的な情報で正確に伝わる</li>
+                        </ul>
+                    </div>
+                    <div class="best-practice">
+                        <h3>🌐 Cursorのブラウザー機能</h3>
+                        <ul>
+                            <li>Cursorがブラウザで動作確認</li>
+                            <li>実際の画面を見ながら修正</li>
+                            <li>より正確な問題解決が可能</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="support-tip" style="margin-top: 20px;">
+                    💡 言葉だけでは伝わりにくい問題も、視覚的な情報で解決しやすくなります
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    効果的な伝え方です。
+                    スクリーンショットを活用することで、問題が起きている画面を撮影し、Cursorのチャットに画像を添付できます。
+                    視覚的な情報で正確に伝わります。
+                    Cursorのブラウザー機能を活用することで、Cursorがブラウザで動作確認し、実際の画面を見ながら修正できます。
+                    より正確な問題解決が可能です。
+                    言葉だけでは伝わりにくい問題も、視覚的な情報で解決しやすくなります。
+                </aside>
+            </section>
+
+
+            <!-- スライド23: 開発の進め方 -->
+            <section>
+                <h2>🚀 開発の進め方</h2>
+                <div class="dev-steps">
+                    <ol>
+                        <li class="fragment">まずはレベル1を完成させる（15-20分）</li>
+                        <li class="fragment">動作確認をして、問題なければ次へ</li>
+                        <li class="fragment">レベル2にチャレンジ（15-20分）</li>
+                        <li class="fragment">余裕があればカスタマイズ機能を追加</li>
+                        <li class="fragment">発表準備（10分）</li>
+                    </ol>
+                </div>
+                <div class="dev-tip">
+                    <p>💡 動作確認を重視して進めることが成功の鍵です</p>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    開発の進め方です。
+                    まずはレベル1を完成させ、動作確認をして、問題なければ次へ進みます。
+                    レベル2にチャレンジし、余裕があればカスタマイズ機能を追加します。
+                    最後に発表準備をします。
+                    動作確認を重視して進めることが成功の鍵です。
+                </aside>
+            </section>
+
+            <!-- スライド24: サポート体制 -->
+            <section>
+                <h2>🤝 サポート体制</h2>
+                <div class="support-wrapper">
+                    <div class="hint-box">
+                        <h3>困ったときは</h3>
+                        <ul>
+                            <li>いつでも質問してください</li>
+                            <li>画面共有してアドバイスします</li>
+                            <li>具体的なプロンプト例を提示します</li>
+                            <li>API関連のエラーは特に丁寧にサポートします</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="support-tip">
+                    <p>💡 遠慮せず、どんどん質問してください！</p>
+                </div>
+                <aside class="notes">
+                    【30秒】
+                    サポート体制です。
+                    困ったときは、いつでも質問してください。
+                    画面共有してアドバイスし、具体的なプロンプト例を提示します。
+                    API関連のエラーは特に丁寧にサポートします。
+                    遠慮せず、どんどん質問してください。
+                </aside>
+            </section>
+
+            <!-- スライド25: まとめ -->
+            <section>
+                <h2>✨ まとめ</h2>
+                <div class="summary-grid">
+                    <div class="summary-card fragment">
+                        <p>📝 具体的な<br>プロンプトで指示する</p>
+                    </div>
+                    <div class="summary-card fragment">
+                        <p>🔄 段階的に実装する</p>
+                    </div>
+                    <div class="summary-card fragment">
+                        <p>❓ 困ったら質問する</p>
+                    </div>
+                    <div class="summary-card highlight-card fragment">
+                        <p>🎉 楽しみながら開発する</p>
+                    </div>
+                </div>
+                <div class="summary-info fragment">
+                    <p>目標時間: <span class="time">60分</span></p>
+                    <p>わからないことがあれば、いつでも質問してください！</p>
+                </div>
+                <div class="summary-tip fragment">
+                    <p>💡 それでは、開発タイムを始めましょう！</p>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    まとめです。
+                    具体的なプロンプトで指示し、段階的に実装し、
+                    困ったら質問し、楽しみながら開発することが重要です。
+                    目標時間は60分です。
+                    わからないことがあれば、いつでも質問してください。
+                    それでは、開発タイムを始めましょう。
+                </aside>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- デモ・ヒントセクション -->
+            <!-- ============================================ -->
+
+            <!-- スライド28: デモ・ヒントタイトル -->
+            <section>
+                <h2>💡 デモ・ヒント</h2>
+                <p class="title-subtitle">詰まったときの参考資料</p>
+                <p class="title-description">
+                    開発中に困ったら、このスライドを確認してください
+                </p>
+                <aside class="notes">
+                    【10秒】
+                    デモ・ヒントのスライドです。
+                    開発中に困ったら、このスライドを確認してください。
+                </aside>
+            </section>
+
+            <!-- スライド29: よくある詰まりポイント1 -->
+            <section>
+                <h2>⚠️ よくある詰まりポイント</h2>
+                <div class="problem-box">
+                    <h3>1. プロンプトが曖昧すぎて期待通りに動かない</h3>
+                    <p>何を実装すればいいか分からない、AIが意図を理解してくれない</p>
+                </div>
+                <div class="solution-box">
+                    <h3>解決方法</h3>
+                    <ul>
+                        <li>具体的な要件を追加したプロンプトを提示</li>
+                        <li>「何を」「どのように」「どこに」を明確にする</li>
+                        <li>「🎯 お題説明」を目的、「✅ お題 - レベル1」をコンテキストとして活用</li>
+                        <li>段階的に実装して、1つずつ確認する</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    よくある詰まりポイントの1つ目です。
+                    プロンプトが曖昧すぎて期待通りに動かない場合、
+                    具体的な要件を追加したプロンプトを提示し、
+                    「何を」「どのように」「どこに」を明確にします。
+                    「🎯 お題説明」を目的、「✅ お題 - レベル1」をコンテキストとして活用します。
+                    段階的に実装して、1つずつ確認することも有効です。
+                </aside>
+            </section>
+
+            <!-- スライド30: よくある詰まりポイント2 -->
+            <section style="padding: 0.3em 1em;">
+                <h2 style="font-size: 1.2em; margin-bottom: 0.3em;">⚠️ よくある詰まりポイント（続き）</h2>
+                <div class="problem-box" style="padding: 10px; margin: 8px 0;">
+                    <h3 style="font-size: 0.9em; margin-bottom: 6px;">2. クリックしても動作しない、<br>期待通りに表示されない</h3>
+                    <p style="font-size: 0.75em; margin: 0;">ボタンをクリックしても反応しない、商品が表示されない、どう伝えればいいか分からない</p>
+                </div>
+                <div class="solution-box" style="padding: 10px; margin: 8px 0;">
+                    <h3 style="font-size: 0.9em; margin-bottom: 6px;">解決方法</h3>
+                    <ul style="margin-top: 6px; padding-left: 20px;">
+                        <li style="font-size: 0.7em; line-height: 1.3; margin-bottom: 0.3em;">問題を具体的に伝える（「商品カードをクリックしても詳細ページに遷移しない」など）</li>
+                        <li style="font-size: 0.7em; line-height: 1.3; margin-bottom: 0.3em;">状況を明確に伝える（「どこをクリックしたか」「何が期待されていたか」「実際にどうなったか」）</li>
+                        <li style="font-size: 0.7em; line-height: 1.3; margin-bottom: 0.3em;">スクリーンショットを添付して視覚的に伝える</li>
+                        <li style="font-size: 0.7em; line-height: 1.3; margin-bottom: 0.3em;">ブラウザのコンソールにエラーが出ているか確認して伝える</li>
+                        <li style="font-size: 0.7em; line-height: 1.3; margin-bottom: 0.3em;">Cursorのブラウザー機能を活用してもらう</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    よくある詰まりポイントの2つ目です。
+                    クリックしても動作しない、期待通りに表示されない場合、
+                    問題を具体的に伝え、状況を明確に伝えます。
+                    スクリーンショットを添付して視覚的に伝えることも有効です。
+                    ブラウザのコンソールにエラーが出ているか確認して伝えます。
+                    Cursorのブラウザー機能を活用してもらうことも推奨します。
+                </aside>
+            </section>
+
+            <!-- スライド31: よくある詰まりポイント3 -->
+            <section>
+                <h2>⚠️ よくある詰まりポイント（続き）</h2>
+                <div class="problem-box">
+                    <h3>3. 思った通りのデザインにならない</h3>
+                    <p>「もっと見やすく」と言っても、期待したデザインにならない</p>
+                </div>
+                <div class="solution-box">
+                    <h3>解決方法</h3>
+                    <ul>
+                        <li>デザインの具体的なイメージを言葉で伝える</li>
+                        <li>「もっと見やすく」ではなく「カードに影をつけて、間隔を広めに」など具体的に</li>
+                        <li>参考サイトのURLを共有して「このようなデザインで」と伝える</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    よくある詰まりポイントの3つ目です。
+                    思った通りのデザインにならない場合、
+                    デザインの具体的なイメージを言葉で伝えます。
+                    「もっと見やすく」ではなく「カードに影をつけて、間隔を広めに」など具体的に指示します。
+                    参考サイトのURLを共有して「このようなデザインで」と伝えることも有効です。
+                </aside>
+            </section>
+
+            <!-- スライド32: よくある詰まりポイント4 -->
+            <section>
+                <h2>⚠️ よくある詰まりポイント（続き）</h2>
+                <div class="problem-box">
+                    <h3>4. AIが何をしたのか理解できない</h3>
+                    <p>生成されたコードが複雑で、何が起きているか分からない</p>
+                </div>
+                <div class="solution-box">
+                    <h3>解決方法</h3>
+                    <ul>
+                        <li>「このコードの動作を説明してください」と質問する</li>
+                        <li>段階的に実装して、1つずつ理解する</li>
+                        <li>ソースコードを読む必要はない（バイブコーディングの前提）</li>
+                        <li>動作確認を重視し、動けばOK</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    よくある詰まりポイントの4つ目です。
+                    AIが何をしたのか理解できない場合、
+                    「このコードの動作を説明してください」と質問します。
+                    段階的に実装して、1つずつ理解することも有効です。
+                    ソースコードを読む必要はない（バイブコーディングの前提）ので、
+                    動作確認を重視し、動けばOKです。
+                </aside>
+            </section>
+
+            <!-- スライド33: デザインのヒント -->
+            <section>
+                <h2>🎨 デザインのヒント</h2>
+                <div class="tip-grid">
+                    <div class="tip-item">
+                        <h3>カードデザイン</h3>
+                        <ul>
+                            <li>影をつける</li>
+                            <li>角を丸くする</li>
+                            <li>ホバー効果を追加</li>
+                        </ul>
+                    </div>
+                    <div class="tip-item">
+                        <h3>レイアウト</h3>
+                        <ul>
+                            <li>整った配置にする</li>
+                            <li>適切な間隔を設定</li>
+                            <li>画面サイズに合わせて調整</li>
+                        </ul>
+                    </div>
+                    <div class="tip-item">
+                        <h3>色使い</h3>
+                        <ul>
+                            <li>統一感のある配色</li>
+                            <li>コントラストを意識</li>
+                            <li>アクセントカラーを活用</li>
+                        </ul>
+                    </div>
+                    <div class="tip-item">
+                        <h3>アニメーション</h3>
+                        <ul>
+                            <li>スムーズな遷移</li>
+                            <li>ホバー時の変化</li>
+                            <li>ローディングアニメーション</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【50秒】
+                    デザインのヒントです。
+                    カードデザイン、レイアウト、色使い、アニメーションの4つの観点から
+                    ヒントを提供します。
+                    具体的な指示を出すことで、期待通りのデザインを実現できます。
+                </aside>
+            </section>
+
+            <!-- スライド34: プロンプトの改善例 -->
+            <section style="padding: 0.3em 1em;">
+                <h2 style="font-size: 1.2em; margin-bottom: 0.3em;">📝 プロンプトの改善例</h2>
+                <div class="prompt-wrapper">
+                    <div class="problem-box margin-bottom" style="padding: 10px; margin: 6px 0;">
+                        <h3 style="font-size: 0.9em; margin-bottom: 6px;">改善前</h3>
+                        <p style="font-size: 0.8em; margin: 0;">「ECサイトを作って」</p>
+                        <p style="font-size: 0.7em; margin-top: 6px; margin-bottom: 0; color: rgba(255,255,255,0.7);">→ 目的だけ、何を作ればいいか分からない</p>
+                    </div>
+                    <div class="solution-box" style="padding: 10px; margin: 6px 0;">
+                        <h3 style="font-size: 0.9em; margin-bottom: 6px;">改善後</h3>
+                        <div style="text-align: left;">
+                            <p style="font-size: 0.75em; margin-bottom: 6px; line-height: 1.3;"><strong>🎯 目的：</strong>ECサイトを作成してください</p>
+                            <p style="font-size: 0.75em; margin-bottom: 4px; line-height: 1.3;"><strong>📋 コンテキスト：</strong></p>
+                            <ul style="font-size: 0.7em; margin-left: 18px; margin-top: 2px; margin-bottom: 0; padding-left: 0; line-height: 1.3;">
+                                <li style="margin-bottom: 0.2em;">HTML, CSS, JavaScriptで実装</li>
+                                <li style="margin-bottom: 0.2em;">商品一覧をカード形式で表示</li>
+                                <li style="margin-bottom: 0;">PCで見やすいデザイン</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="prompt-tip" style="margin-top: 10px; font-size: 0.75em;">
+                    💡 目的とコンテキストを明確にすることで、期待通りの結果が得られます
+                </div>
+                <aside class="notes">
+                    【40秒】
+                    プロンプトの改善例です。
+                    改善前は「ECサイトを作って」という目的だけの曖昧な指示ですが、
+                    改善後は目的とコンテキストを明確にしています。
+                    目的とコンテキストを明確にすることで、期待通りの結果が得られます。
+                </aside>
+            </section>
+
+            <!-- スライド35: 発表タイムに向けて -->
+            <section style="padding: 1em 2em;">
+                <h2 style="margin-bottom: 0.5em;">📢 発表タイムに向けて</h2>
+                <p style="font-size: 0.95em; margin-bottom: 30px;">開発タイム終了後、成果を発表してもらいます（合計8分）</p>
+                <div class="presentation-grid">
+                    <div class="presentation-card">
+                        <h3>📝 開発プロセス<span class="time">（4分）</span></h3>
+                        <div class="content">
+                            どんなプロンプトを使ったか<br>
+                            詰まった点とその解決方法<br>
+                            工夫した点
+                        </div>
+                    </div>
+                    <div class="presentation-card">
+                        <h3>🎬 成果物デモ<span class="time">（3分）</span></h3>
+                        <div class="content">
+                            画面共有して実際に動かす<br>
+                            実装した機能の説明<br>
+                            カスタマイズ内容
+                        </div>
+                    </div>
+                    <div class="presentation-card">
+                        <h3>💭 感想・学び<span class="time">（1分）</span></h3>
+                        <div class="content">
+                            AIエージェント開発の感想<br>
+                            新しい発見や気づき
+                        </div>
+                    </div>
+                    <div class="presentation-card prepare-card">
+                        <h3>💡 発表準備</h3>
+                        <div class="content">
+                            開発プロセスをまとめる<br>
+                            Cursorに依頼してもOK
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    【60秒】
+                    発表タイムに向けてです。
+                    開発タイム終了後、成果を発表してもらいます。
+                    発表内容は、開発プロセス4分、成果物デモ3分、感想・学び1分の合計8分です。
+                    発表準備として、開発プロセスをMarkdownにまとめましょう。
+                    Cursorに発表資料作成を依頼してもOKです。
+                    4つのカードで発表のポイントを整理しています。
+                </aside>
+            </section>
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide',
+            slideNumber: true,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 2.0
+        });
+    </script>
+</body>
+</html>
+
